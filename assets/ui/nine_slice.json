@@ -1,0 +1,48 @@
+{
+  "nine_slice_insets_px": {
+    "panel_frame": {
+      "left": 30,
+      "right": 30,
+      "top": 30,
+      "bottom": 30
+    },
+    "button_primary_normal": {
+      "left": 28,
+      "right": 28,
+      "top": 28,
+      "bottom": 28
+    },
+    "button_primary_hover": {
+      "left": 28,
+      "right": 28,
+      "top": 28,
+      "bottom": 28
+    },
+    "button_primary_pressed": {
+      "left": 28,
+      "right": 28,
+      "top": 28,
+      "bottom": 28
+    },
+    "pill_badge": {
+      "left": 24,
+      "right": 24,
+      "top": 24,
+      "bottom": 24
+    },
+    "icon_button_bg": {
+      "left": 20,
+      "right": 20,
+      "top": 20,
+      "bottom": 20
+    },
+    "progress_bar_track": {
+      "left": 10,
+      "right": 10,
+      "top": 10,
+      "bottom": 10
+    }
+  },
+  "coordinates": "left,right,top,bottom",
+  "note": "Scale nine-slice edges without stretching corners. Sprite sheets have sidecar JSON."
+}

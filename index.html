@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080d20">
+<title>ORBIT HOP — One tap. Infinite space.</title><link rel="icon" type="image/svg+xml" href="assets/app_share/favicon.svg"><link rel="apple-touch-icon" href="assets/app_share/icon_app_192.png"><meta property="og:title" content="ORBIT HOP"><meta property="og:description" content="One tap. Infinite space."><meta property="og:image" content="assets/app_share/share_preview_1200x630.png">
+<style>
+:root{color-scheme:dark;--ink:#f5f6ff;--muted:#a3accd;--cyan:#71f5f1;--pink:#ff7da5;--purple:#b99cff}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080d20;color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit}#game{position:fixed;inset:0;display:block;touch-action:none;cursor:crosshair}.hud{position:fixed;inset:0;pointer-events:none}.topbar{display:flex;align-items:flex-start;justify-content:space-between;padding:clamp(16px,3.3vw,36px);gap:10px}.logo{font-size:13px;letter-spacing:.27em;font-weight:900;color:#e9f9ff}.logo b{color:var(--cyan)}.subtitle{font-size:10px;color:var(--muted);letter-spacing:.17em;margin-top:5px}.scores{display:flex;align-items:start;gap:clamp(16px,3vw,44px);text-align:right}.score-label{display:block;font-size:10px;letter-spacing:.2em;color:#9ba9c7;font-weight:700}.score-number{display:block;font-size:clamp(23px,4vw,38px);font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums}.buttons{position:fixed;right:clamp(16px,3.3vw,36px);bottom:calc(18px + env(safe-area-inset-bottom));display:flex;gap:8px;pointer-events:auto}.icon-button{width:42px;height:42px;border-radius:13px;border:1px solid #8192c036;background:#101a36bc;color:#ccd5f8;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(12px)}.icon-button:hover{border-color:#82dff488;background:#1d2b50}.bottom-left{position:fixed;left:clamp(16px,3.3vw,36px);bottom:calc(23px + env(safe-area-inset-bottom));font-size:11px;letter-spacing:.1em;color:#8996b7}.combo{position:fixed;top:110px;left:50%;transform:translateX(-50%);font-weight:900;font-size:17px;color:#fce29d;opacity:0;text-shadow:0 0 20px #ffd9856b;transition:opacity .2s}.overlay{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:#080d2070;backdrop-filter:blur(7px);transition:opacity .25s;pointer-events:auto}.overlay.hidden{opacity:0;pointer-events:none}.panel{position:relative;text-align:center;width:min(430px,100%);padding:42px 30px 35px;border:1px solid #a0c2ff30;border-radius:24px;background:linear-gradient(145deg,#152445f2,#0c142df4);box-shadow:0 30px 90px #0008,0 0 65px #6bdff414}.eyebrow{font-size:11px;letter-spacing:.3em;font-weight:900;color:var(--cyan);text-transform:uppercase}.panel h1{font-size:clamp(49px,10vw,75px);letter-spacing:-.075em;line-height:1;margin:12px 0 16px;font-weight:900}.panel h1 span{color:#79f4ef}.panel p{max-width:310px;margin:0 auto 22px;line-height:1.65;font-size:14px;color:#aeb9d6}.action{width:100%;border:0;background:linear-gradient(100deg,#7df5e9,#8bb1ff);color:#081326;border-radius:13px;min-height:51px;padding:12px 20px;font-weight:900;letter-spacing:.09em;cursor:pointer;box-shadow:0 6px 26px #62e1e938}.action:hover{filter:brightness(1.1)}.hint{color:#7789aa;font-size:11px;margin-top:17px;letter-spacing:.06em}.pill{display:inline-block;padding:7px 12px;border:1px solid #9cb5ef32;background:#8bb2ff0b;border-radius:99px;color:#d3e0fa;font-size:11px;letter-spacing:.09em;margin:0 3px 7px}.result{font-size:51px;font-weight:900;letter-spacing:-.06em;margin:4px 0 0}.flash{position:fixed;inset:0;pointer-events:none;opacity:0;background:white}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(max-width:550px){.subtitle{display:none}.score-label{font-size:9px}.scores{gap:17px}.bottom-left{font-size:10px;max-width:50%}.combo{top:90px}.panel{padding:36px 24px 29px}}
+
+.ship-picker{margin:0 auto 20px;max-width:335px;text-align:left}.ship-picker-label{font-size:10px;letter-spacing:.18em;font-weight:800;color:#a9b7d6;text-align:center;margin:0 0 11px}.ship-options{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.ship-choice{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:78px;background:#111e3e;border:1px solid #6b80b64d;border-radius:12px;color:#aebcdb;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}.ship-choice:hover{background:#1a2e50;transform:translateY(-1px)}.ship-choice.selected{border-color:#78efe9;background:#1b3c55;box-shadow:0 0 0 1px #78efe933, inset 0 0 22px #5af0dc0d;color:#f4ffff}.ship-choice svg{width:43px;height:28px;overflow:visible;filter:drop-shadow(0 0 5px #78f5ed66)}.ship-choice span{font-size:10px;font-weight:800;letter-spacing:.08em}.ship-picker.hidden{display:none}.flight-hint{font-size:10px;color:#8ea6c8;margin-top:-8px;margin-bottom:16px;text-align:center}
+.progress{position:fixed;left:0;top:0;width:100%;height:3px;background:#ffffff12}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7df5e9,#ffe49d);transition:width .35s}
+/* ---------- asset-based UI ---------- */
+.progress{left:16px;right:16px;top:5px;width:auto;height:8px;border-radius:5px;overflow:hidden;border:4px solid transparent;border-image:url(assets/ui/progress_bar_track.png) 8 fill/4px stretch;background:none}
+.progress i{height:100%;border-radius:3px;background:url(assets/ui/progress_bar_fill.png) 0 0/100% 100% no-repeat}
+.icon-button{background:url(assets/ui/icon_button_bg.png) center/100% 100% no-repeat;border:0;backdrop-filter:none}
+.icon-button:hover{background:url(assets/ui/icon_button_bg.png) center/100% 100% no-repeat;filter:brightness(1.35)}
+.icon-button img{width:22px;height:22px;display:block;pointer-events:none}
+.panel{border:30px solid transparent;border-image:url(assets/ui/panel_frame.png) 30 fill/30px stretch;background:none;border-radius:34px;padding:12px 0 5px}
+.action{border:22px solid transparent;border-image:url(assets/ui/button_primary_normal.png) 28 fill/22px stretch;background:none;box-shadow:none;border-radius:0;min-height:64px;padding:0 10px;display:flex;align-items:center;justify-content:center;width:100%}
+.action:hover{filter:none;border-image-source:url(assets/ui/button_primary_hover.png)}
+.action:active{border-image-source:url(assets/ui/button_primary_pressed.png)}
+.pill{border:11px solid transparent;border-image:url(assets/ui/pill_badge.png) 22 fill/11px stretch;background:none;padding:0 4px;line-height:1.2;margin:0 2px 5px}
+.ship-thumb{display:block;width:56px;height:34px;background-position:center;background-size:96px 96px;background-repeat:no-repeat;filter:drop-shadow(0 0 5px #78f5ed55)}
+.panel-art{display:block;margin:0 auto 6px;width:auto;height:128px}
+.panel-banner{display:block;margin:0 auto 4px;width:min(250px,80%);height:auto}
+.world-title{position:fixed;left:50%;top:24%;opacity:0;pointer-events:none;transform:translateX(-50%)}
+.world-title.show{animation:wt 2.3s ease both}
+.world-title img{display:block;width:min(380px,80vw);height:auto}
+.world-title-text{display:none;padding:14px 34px;border-radius:16px;border:1px solid #9cb5ef55;background:#101a36d9;color:#fff;font-weight:900;letter-spacing:.2em;font-size:22px}
+@keyframes wt{0%{opacity:0;transform:translate(-50%,12px) scale(.94)}16%,68%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-10px) scale(1)}}
+.panel-art[hidden],.panel-banner[hidden]{display:none}
+#stats{margin-bottom:14px}
+@media(max-width:550px){.panel{padding:8px 0 0}.panel-art{height:104px}}
+@media(max-height:740px){.panel-art{display:none}}
+</style></head>
+<body>
+<canvas id="game" aria-label="Orbit Hop game"></canvas>
+<div class="hud"><div class="progress"><i id="progressFill"></i></div><div class="topbar"><div><div class="logo">ORBIT <b>HOP</b><span style="color:#f4aa85"> ✦</span></div><div class="subtitle">ONE TAP. INFINITE SPACE.</div></div><div class="scores"><div><span class="score-label" id="worldLabel">WORLD 1</span><span class="score-number" id="mapProgress">1/20</span></div><div><span class="score-label">SCORE</span><span class="score-number" id="score">0</span></div><div><span class="score-label">BEST</span><span class="score-number" id="best">0</span></div></div></div><div class="world-title" id="worldTitle"><img id="worldTitleImg" alt=""><span class="world-title-text" id="worldTitleText"></span></div><div class="combo" id="combo"></div><div class="bottom-left" id="status">TAP / SPACE TO LAUNCH</div><div class="buttons"><button class="icon-button" id="mute" title="Toggle sound" aria-label="Toggle sound"><img src="assets/ui/icon_sound_on.svg" alt=""></button><button class="icon-button" id="pause" title="Pause" aria-label="Pause"><img src="assets/ui/icon_pause.svg" alt=""></button></div></div>
+<div class="overlay" id="overlay"><div class="panel"><img class="panel-art" id="panelArt" alt="" hidden><img class="panel-banner" id="panelBanner" alt="" hidden><div class="eyebrow" id="eyebrow">A tiny space adventure</div><h1 id="panelTitle">ORBIT <span>HOP</span></h1><p id="description">Follow the faint launch guide, time your jump, then tap once in flight for a 15° correction. Reach the flag planet to clear each world!</p><div id="stats"><span class="pill">TAP TO LAUNCH</span><span class="pill">ONE MID-FLIGHT STEER</span></div><div class="ship-picker" id="shipPicker"><div class="ship-picker-label">CHOOSE YOUR SHIP · COSMETIC ONLY</div><div class="ship-options"><button class="ship-choice selected" type="button" data-ship="dart" aria-pressed="true"><i class="ship-thumb" style="background-image:url(assets/ships/ship_dart.png)"></i><span>DART</span></button><button class="ship-choice" type="button" data-ship="comet" aria-pressed="false"><i class="ship-thumb" style="background-image:url(assets/ships/ship_comet.png)"></i><span>COMET</span></button><button class="ship-choice" type="button" data-ship="scout" aria-pressed="false"><i class="ship-thumb" style="background-image:url(assets/ships/ship_scout.png)"></i><span>SCOUT</span></button></div></div><div class="flight-hint" id="flightHint">DASHED LINE SHOWS YOUR LAUNCH DIRECTION</div><button class="action" id="start">START EXPLORING →</button><div class="hint" id="hint">TAP TO LAUNCH · TAP ONCE IN FLIGHT TO STEER 15°</div></div></div>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false});const $=id=>document.getElementById(id);const scoreEl=$('score'),bestEl=$('best'),statusEl=$('status'),comboEl=$('combo'),overlay=$('overlay'),startBtn=$('start'),pauseBtn=$('pause'),muteBtn=$('mute');
+const TAU=Math.PI*2;const MAP_SIZE=20;const clamp=(n,a,b)=>Math.max(a,Math.min(b,n)),rand=(a,b)=>a+rng()*(b-a);let fx=[],rng=Math.random,world=1,mapStartScore=0,completeAt=0,w=0,h=0,dpr=1,scale=1,cam={x:0,y:0},stars=[],planets=[],particles=[],ship,mode='menu',score=0,combo=0,jumps=0,high=0,t=0,last=0,elapsed=0,flash=0,shake=0,launchTime=0,nextId=0,sound=true,audio,steerUsed=false,steerFeedback=0,shipStyle='dart';
+try{high=Number(localStorage.getItem('orbitHopBest')||0)||0;shipStyle=localStorage.getItem('orbitHopShip')||'dart'}catch(e){}if(!['dart','comet','scout'].includes(shipStyle))shipStyle='dart';bestEl.textContent=high;
+const colors=[['#70def7','#2767aa'],['#ffb47a','#c65b7c'],['#c2a4ff','#6652b8'],['#7ae9bf','#319a89'],['#ffe096','#b78a53'],['#ed94c6','#904685']];
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let z=Math.imul(a^a>>>15,1|a);z=z+Math.imul(z^z>>>7,61|z)^z;return((z^z>>>14)>>>0)/4294967296}}
+const diff=()=>Math.min(1,(world-1)*.08);const pace=()=>(world-1)*8+jumps;
+const themes=[['#142249','#0c1631','#080d20'],['#2a1a4d','#170f33','#0c0720'],['#10393f','#0a2229','#061519'],['#40204a','#24112f','#12081a'],['#472a24','#2a1713','#150a09']];
+
+const P='assets/';const A={};
+const ASSET_FILES={ship_dart:'ships/ship_dart.png',ship_comet:'ships/ship_comet.png',ship_scout:'ships/ship_scout.png',flame_dart:'ships/flame_dart.png',flame_comet:'ships/flame_comet.png',flame_scout:'ships/flame_scout.png',
+planet_01:'planets/planet_01.png',planet_02:'planets/planet_02.png',planet_03:'planets/planet_03.png',planet_04:'planets/planet_04.png',planet_05:'planets/planet_05.png',planet_06:'planets/planet_06.png',
+planet_icy:'planets/planet_icy.png',planet_volcanic:'planets/planet_volcanic.png',planet_ringed:'planets/planet_ringed.png',planet_gasgiant:'planets/planet_gasgiant.png',planet_goal:'planets/planet_goal.png',
+glow:'planets/planet_glow.png',goal_ring:'planets/goal_ring.png',ring_unv:'planets/gravity_ring_unvisited.png',ring_vis:'planets/gravity_ring_visited.png',
+star:'effects/star_bonus.png',star_burst:'effects/star_collect_burst.png',clear_burst:'effects/world_clear_burst.png',steer_arc:'effects/steer_arc.png',guide_dot:'effects/guide_dot.png',pulse:'effects/catch_pulse_ring.png',trail:'effects/trail_texture.png',
+particle_spark:'effects/particle_spark.png',particle_dust:'effects/particle_dust.png',particle_dot:'effects/particle_dot.png'};
+for(const k in ASSET_FILES){const im=new Image();im.src=P+ASSET_FILES[k];A[k]=im}
+const ok=im=>!!im&&im.complete&&im.naturalWidth>0;
+// Tint a white sprite with a colour (cached; no pixel read-back, so it also works from file://)
+const tintCache={};
+function tinted(name,color,px){const img=A[name];if(!ok(img))return null;const key=name+color+px;let c=tintCache[key];if(!c){c=document.createElement('canvas');c.width=c.height=px;const g=c.getContext('2d');g.drawImage(img,0,0,px,px);g.globalCompositeOperation='source-in';g.fillStyle=color;g.fillRect(0,0,px,px);tintCache[key]=c}return c}
+// Big backgrounds are loaded per world (only the current and next one stay in memory)
+const bgCache={};const bgN=n=>((n-1)%5)+1;
+function getBg(kind,n){const key=kind+n;let im=bgCache[key];if(!im){im=new Image();im.src=P+'backgrounds/'+(kind==='bg'?'bg_world_'+n:'bg_world_'+n+'_parallax')+'.png';bgCache[key]=im}return im}
+function pruneBg(){const keep=[bgN(world),bgN(world+1)];for(const key of Object.keys(bgCache)){const n=Number(key.replace(/\D/g,''));if(!keep.includes(n))delete bgCache[key]}}
+function fadeIn(im){im._t0=im._t0||performance.now();return Math.min(1,(performance.now()-im._t0)/600)}
+const mod=(a,n)=>((a%n)+n)%n;
+function scaledTile(im,tile){if(im._sc&&im._sc.width===tile)return im._sc;const c=document.createElement('canvas');c.width=c.height=tile;c.getContext('2d').drawImage(im,0,0,tile,tile);im._sc=c;return c}
+function drawTiled(im,tile,f,alpha){const sc=scaledTile(im,tile),ox=mod(-cam.x*f*scale,tile),oy=mod(-cam.y*f*scale,tile);ctx.globalAlpha=alpha;for(let x=ox-tile;x<w;x+=tile)for(let y=oy-tile;y<h;y+=tile)ctx.drawImage(sc,Math.floor(x),Math.floor(y));ctx.globalAlpha=1}
+function drawBackground(){const n=bgN(world),b=getBg('bg',n),p=getBg('par',n);if(ok(b))drawTiled(b,1500,.1,fadeIn(b));if(ok(p))drawTiled(p,1700,.26,fadeIn(p)*.45)}
+function setIcon(btn,name){const i=btn.querySelector('img');if(i)i.src=P+'ui/'+name+'.svg'}
+function setArt(art,banner){const a=$('panelArt'),b=$('panelBanner');a.hidden=!art;if(art)a.src=P+'ui/'+art+'.png';b.hidden=!banner;if(banner)b.src=P+'ui/'+banner+'.png';$('eyebrow').style.display=banner?'none':''}
+function showWorldTitle(){const el=$('worldTitle'),im=$('worldTitleImg'),tx=$('worldTitleText');if(world<=5){im.src=P+'ui/title_world_'+world+'.png';im.style.display='block';tx.style.display='none'}else{im.style.display='none';tx.textContent='WORLD '+world;tx.style.display='block'}el.classList.remove('show');void el.offsetWidth;el.classList.add('show')}
+const extras=[['planet_icy',0],['planet_volcanic',1],['planet_ringed',2],['planet_gasgiant',4]];
+function resize(){dpr=Math.min(devicePixelRatio||1,2);w=window.innerWidth;h=window.innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);scale=clamp(Math.min(w/750,h/730),.66,1.12);stars=Array.from({length:Math.min(180,Math.round(w*h/5300))},()=>({x:Math.random()*w,y:Math.random()*h,r:rand(.4,1.5),phase:rand(0,TAU),v:rand(.12,.65)}));if(mode==='menu'){cam.x=0;cam.y=0}}window.addEventListener('resize',resize);
+function makePlanet(x,y,r,index){let ci=index%colors.length,sprite='planet_0'+(ci+1);if(world>=2&&index>0){const hs=(index*73+world*131)%100;if(hs<14+diff()*26){const ex=extras[hs%4];sprite=ex[0];ci=ex[1]}}const c=colors[ci];return{sprite,id:nextId++,x,y,r,gravity:r+clamp(48*scale,33,56),c,phase:rand(0,TAU),speed:rand(.65,1.07)*(rng()<.5?-1:1),ring:index%5===3,visited:false,pulse:0,star:false}}
+function freshWorld(){rng=mulberry(world*7919+13);nextId=0;const first=makePlanet(0,0,clamp(48*scale,35,58),0);first.speed=1.08;first.visited=true;planets=[first];while(planets.length<MAP_SIZE)appendPlanet();planets[MAP_SIZE-1].goal=true;planets[MAP_SIZE-1].star=false;planets[MAP_SIZE-1].sprite='planet_goal';rng=Math.random;ship={x:0,y:0,vx:0,vy:0,angle:-Math.PI/2,orbit:first,orbitalAngle:-Math.PI/2,orbitR:first.gravity-7*scale,trail:[],flying:false,alive:true,alpha:1};ship.x=first.x+Math.cos(ship.orbitalAngle)*ship.orbitR;ship.y=first.y+Math.sin(ship.orbitalAngle)*ship.orbitR;cam={x:first.x,y:first.y-h/(6*scale)};particles=[];fx=[];pruneBg();steerUsed=false;steerFeedback=0;score=mapStartScore;combo=0;jumps=0;elapsed=0;launchTime=0;updateHud()}
+function appendPlanet(){const prev=planets[planets.length-1];let p;for(let i=0;i<20;i++){const a=rand(-Math.PI*.98,Math.PI*.05),distance=rand(180+diff()*45,270+diff()*60)*scale;const r=rand(27-diff()*5,54-diff()*14)*scale;const x=prev.x+Math.cos(a)*distance,y=prev.y+Math.sin(a)*distance;if(planets.every(q=>Math.hypot(q.x-x,q.y-y)>q.r+r+65*scale)){p=makePlanet(x,y,r,planets.length);break}}if(!p)p=makePlanet(prev.x+rand(175,240)*scale,prev.y-rand(90,170)*scale,rand(30,50)*scale,planets.length);p.star=rng()<.48;planets.push(p)}
+function begin(){if(mode==='complete'){if(performance.now()-completeAt<900)return;world++;mapStartScore=score}else if(mode==='menu'){world=1;mapStartScore=0}freshWorld();mode='playing';overlay.classList.add('hidden');setIcon(pauseBtn,'icon_pause');showWorldTitle();statusEl.textContent='TAP TO LAUNCH · TAP AGAIN IN FLIGHT TO STEER 15°';startAudio()}
+function updateHud(){scoreEl.textContent=score;bestEl.textContent=Math.max(high,score);const n=planets.filter(q=>q.visited).length;$('worldLabel').textContent='WORLD '+world;$('mapProgress').textContent=n+'/'+MAP_SIZE;$('progressFill').style.width=(n/MAP_SIZE*100)+'%'}
+function playTone(f=440,d=.12,type='sine',gain=.045){if(!sound)return;try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f,audio.currentTime);o.frequency.exponentialRampToValueAtTime(f*.74,audio.currentTime+d);g.gain.setValueAtTime(gain,audio.currentTime);g.gain.exponentialRampToValueAtTime(.0001,audio.currentTime+d);o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
+function startAudio(){try{if(audio&&audio.state==='suspended')audio.resume()}catch(e){}}
+function burst(x,y,n,c,vel=140){for(let i=0;i<n;i++){const a=rand(0,TAU),v=rand(20,vel);particles.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,age:0,life:rand(.35,.78),color:c,r:rand(1,3)*scale,kind:(Math.random()*3)|0})}if(particles.length>130)particles.splice(0,particles.length-130)}
+function launch(){if(mode==='menu'||mode==='gameover'){begin();return}if(mode==='paused'){resume();return}if(mode!=='playing'||ship.flying)return;const p=ship.orbit,a=ship.orbitalAngle,sgn=Math.sign(p.speed);const tangent=a+sgn*Math.PI/2;const speed=(250+Math.min(90,pace()*3))*scale;ship.vx=Math.cos(tangent)*speed;ship.vy=Math.sin(tangent)*speed;ship.x+=Math.cos(tangent)*8*scale;ship.y+=Math.sin(tangent)*8*scale;ship.orbit=null;ship.flying=true;ship.angle=tangent;ship.trail=[];launchTime=0;steerUsed=false;steerFeedback=0;jumps++;burst(ship.x,ship.y,8,'#81f9f1',95*scale);playTone(630,.13,'triangle',.06);statusEl.textContent='TAP ONCE TO STEER 15° TOWARD NEXT PLANET'}
+function steer(){
+ if(mode!=='playing'||!ship.flying||steerUsed)return;
+ // A one-time correction: rotate exactly 15 degrees, toward the most reachable planet ahead.
+ const angle=Math.atan2(ship.vy,ship.vx),speed=Math.hypot(ship.vx,ship.vy);
+ let target=null,best=Infinity;
+ for(const p of planets){
+   if(p===ship.lastPlanet)continue;
+   const dx=p.x-ship.x,dy=p.y-ship.y,dist=Math.hypot(dx,dy);
+   const delta=Math.atan2(Math.sin(Math.atan2(dy,dx)-angle),Math.cos(Math.atan2(dy,dx)-angle));
+   if(Math.abs(delta)>Math.PI*.72||dist>560*scale)continue;
+   const cost=dist+Math.abs(delta)*125*scale+(p.visited?1000*scale:0);
+   if(cost<best){best=cost;target=p;}
+ }
+ // Without a reachable target, steer toward the forward-most unvisited planet.
+ if(!target){for(const p of planets){if(p===ship.lastPlanet)continue;const d=Math.hypot(p.x-ship.x,p.y-ship.y)+(p.visited?10000:0);if(d<best){best=d;target=p;}}}
+ if(!target)return;
+ const toTarget=Math.atan2(target.y-ship.y,target.x-ship.x);
+ const difference=Math.atan2(Math.sin(toTarget-angle),Math.cos(toTarget-angle));
+ const turn=(difference>=0?1:-1)*Math.PI/12;
+ ship.vx=Math.cos(angle+turn)*speed;ship.vy=Math.sin(angle+turn)*speed;
+ ship.angle=angle+turn;steerUsed=true;steerFeedback=.7;
+ burst(ship.x,ship.y,12,'#ffe49d',95*scale);playTone(940,.15,'triangle',.06);
+ statusEl.textContent='✓ 15° COURSE CORRECTION USED';
+}
+function catchPlanet(p){ship.flying=false;ship.orbit=p;ship.orbitalAngle=Math.atan2(ship.y-p.y,ship.x-p.x);ship.orbitR=p.gravity-7*scale;ship.x=p.x+Math.cos(ship.orbitalAngle)*ship.orbitR;ship.y=p.y+Math.sin(ship.orbitalAngle)*ship.orbitR;ship.trail=[];steerUsed=false;steerFeedback=0;p.pulse=1;const newPlanet=!p.visited;p.visited=true;if(newPlanet){combo++;const reward=100+Math.min(combo-1,12)*25;score+=reward;if(p.star){score+=50;burst(p.x,p.y,14,'#ffdc93',135*scale);fx.push({k:'star',x:p.x,y:p.y,age:0,dur:.5,n:6})}statusEl.textContent='+'+reward+(p.star?'  ✦ STAR BONUS +50':'');comboEl.textContent=combo>=2?`${combo}× ORBIT STREAK`:'';comboEl.style.opacity=combo>=2?'1':'0';if(score>high){high=score;try{localStorage.setItem('orbitHopBest',high)}catch(e){}}updateHud()}else{combo=0;comboEl.style.opacity='0';statusEl.textContent='REVISITED PLANET — STREAK RESET'}burst(ship.x,ship.y,23,p.c[0],170*scale);playTone(880,.18,'sine',.075);setTimeout(()=>{if(mode==='playing'&&!ship.flying)statusEl.textContent='TAP TO LAUNCH · TAP IN FLIGHT TO STEER'},1000);if(p.goal&&newPlanet)completeMap(p)}
+function completeMap(p){mode='complete';completeAt=performance.now();const bonus=250;score+=bonus;if(score>high){high=score;try{localStorage.setItem('orbitHopBest',high)}catch(e){}}updateHud();let furthest=world;try{furthest=Math.max(world,Number(localStorage.getItem('orbitHopWorld')||0));localStorage.setItem('orbitHopWorld',furthest)}catch(e){}comboEl.style.opacity='0';statusEl.textContent='★ WORLD '+world+' CLEARED  +'+bonus;burst(p.x,p.y,45,'#ffe49d',260*scale);fx.push({k:'clear',x:p.x,y:p.y,age:0,dur:.84,n:10});getBg('bg',bgN(world+1));getBg('par',bgN(world+1));burst(p.x,p.y,25,'#81f9f1',200*scale);playTone(1180,.4,'sine',.08);setArt('art_world_clear','banner_world_clear');$('eyebrow').textContent='MAP CLEARED';$('panelTitle').innerHTML='WORLD <span>'+world+'</span>';$('description').textContent='All '+MAP_SIZE+' planets conquered. +'+bonus+' bonus. The next world is trickier: smaller planets, wider gaps.';$('stats').innerHTML=`<span class="pill">SCORE ${score}</span><span class="pill">BEST ${high}</span><span class="pill">${jumps} LAUNCHES</span>`;startBtn.textContent='WORLD '+(world+1)+' →';$('hint').textContent='TAP THE BUTTON OR PRESS SPACE';$('shipPicker').classList.add('hidden');$('flightHint').style.display='none';setTimeout(()=>{if(mode==='complete')overlay.classList.remove('hidden')},900)}
+function die(){if(mode!=='playing')return;mode='gameover';shake=14;burst(ship.x,ship.y,35,'#ff8a9b',220*scale);playTone(160,.55,'sawtooth',.075);setArt('art_game_over',null);$('eyebrow').textContent='END OF TRANSMISSION';$('panelTitle').innerHTML='LOST IN <span>SPACE</span>';$('description').textContent=score>=high&&score>0?'New personal best! The stars are calling for another run.':'Every launch is another chance to find your rhythm.';$('stats').innerHTML=`<span class="pill">WORLD ${world}</span><span class="pill">SCORE ${score}</span><span class="pill">BEST ${high}</span>`;startBtn.textContent='RETRY WORLD '+world+' →';$('hint').textContent='TAP THE BUTTON OR PRESS SPACE';$('shipPicker').classList.remove('hidden');$('flightHint').style.display='block';overlay.classList.remove('hidden')}
+function pause(){if(mode==='playing'){mode='paused';setArt(null,null);$('eyebrow').textContent='MISSION PAUSED';$('panelTitle').innerHTML='TAKE A <span>BREATH</span>';$('description').textContent='Your orbit is right where you left it.';$('stats').innerHTML=`<span class="pill">SCORE ${score}</span><span class="pill">BEST ${high}</span>`;startBtn.textContent='RESUME →';$('hint').textContent='PRESS SPACE TO RESUME';$('shipPicker').classList.add('hidden');$('flightHint').style.display='none';overlay.classList.remove('hidden');setIcon(pauseBtn,'icon_play')}else if(mode==='paused')resume()}
+function resume(){mode='playing';overlay.classList.add('hidden');setIcon(pauseBtn,'icon_pause')}
+function step(dt){t+=dt;for(const p of planets)p.pulse=Math.max(0,p.pulse-dt*2.4);for(const particle of particles){particle.x+=particle.vx*dt;particle.y+=particle.vy*dt;particle.vx*=Math.exp(-dt*2);particle.vy*=Math.exp(-dt*2);particle.age+=dt}particles=particles.filter(p=>p.age<p.life);for(const f of fx)f.age+=dt;fx=fx.filter(f=>f.age<f.dur);shake=Math.max(0,shake-dt*48);steerFeedback=Math.max(0,steerFeedback-dt);if(mode!=='playing')return;elapsed+=dt;if(ship.flying){launchTime+=dt;const oldX=ship.x,oldY=ship.y;ship.x+=ship.vx*dt;ship.y+=ship.vy*dt;ship.angle=Math.atan2(ship.vy,ship.vx);for(const p of planets){if(p===ship.lastPlanet)continue;const dx=ship.x-p.x,dy=ship.y-p.y,dist=Math.hypot(dx,dy);if(dist<p.r+7*scale){die();break}if(dist<=p.gravity){const oldDist=Math.hypot(oldX-p.x,oldY-p.y);if(oldDist>dist||dist<p.gravity-12*scale){catchPlanet(p);break}}}if(launchTime>2.7)die();}else if(ship.orbit){ship.orbitalAngle+=ship.orbit.speed*dt*(1+Math.min(.4,pace()*.009));ship.x=ship.orbit.x+Math.cos(ship.orbitalAngle)*ship.orbitR;ship.y=ship.orbit.y+Math.sin(ship.orbitalAngle)*ship.orbitR;ship.angle=ship.orbitalAngle+(Math.sign(ship.orbit.speed)*Math.PI/2);ship.lastPlanet=ship.orbit}
+ship.trail.push({x:ship.x,y:ship.y});if(ship.trail.length>20)ship.trail.shift();// Camera: while orbiting, put the active PLANET at (50%, 67%) of the viewport.
+// During flight follow the ship, with gentle forward anticipation and smooth movement.
+const anchorX=.5,anchorY=2/3;
+let focusX=ship.flying?ship.x+ship.vx*.22:ship.orbit.x;
+let focusY=ship.flying?ship.y+ship.vy*.22:ship.orbit.y;
+const targetX=focusX+(0.5-anchorX)*w/scale;
+const targetY=focusY+(0.5-anchorY)*h/scale;
+const catchup=ship.flying?4.8:4.0;
+cam.x+=(targetX-cam.x)*Math.min(1,dt*catchup);
+cam.y+=(targetY-cam.y)*Math.min(1,dt*catchup)}
+function circle(x,y,r,fill){ctx.beginPath();ctx.arc(x,y,r,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill()}else ctx.stroke()}
+function drawPlanet(p){
+ if(Math.abs(p.x-cam.x)>w/scale||Math.abs(p.y-cam.y)>h/scale)return;
+ const pulse=p.pulse*11;ctx.save();ctx.translate(p.x,p.y);
+ // gravity field
+ ctx.globalAlpha=.14;circle(0,0,p.gravity+pulse,p.c[0]);ctx.globalAlpha=1;
+ const ring=A[p.visited?'ring_vis':'ring_unv'];
+ if(ok(ring)){const rs=2*(p.gravity-7)/.9316;ctx.drawImage(ring,-rs/2,-rs/2,rs,rs)}
+ else{ctx.lineWidth=1.4/scale;ctx.strokeStyle=p.visited?'#a0f7f77a':'#9fb1ec4d';ctx.setLineDash([4,6]);circle(0,0,p.gravity-7);ctx.setLineDash([])}
+ // catch pulse
+ if(p.pulse>0){const pr=tinted('pulse',p.c[0],128);if(pr){const ps=2*(p.gravity+pulse)/.9023;ctx.globalAlpha=Math.min(1,p.pulse*.9);ctx.drawImage(pr,-ps/2,-ps/2,ps,ps);ctx.globalAlpha=1}else{ctx.strokeStyle=p.c[0];ctx.globalAlpha=p.pulse*.55;ctx.lineWidth=3;circle(0,0,p.gravity+pulse);ctx.globalAlpha=1}}
+ // soft glow behind the planet
+ const gl=tinted('glow',p.c[0],128);
+ if(gl){const gs=p.r*2*3.4;ctx.globalAlpha=.55;ctx.drawImage(gl,-gs/2,-gs/2,gs,gs);ctx.globalAlpha=1}
+ // body
+ const body=A[p.sprite];
+ if(ok(body)){
+  if(p.goal){const k=2*p.r/175,sz=256*k;ctx.drawImage(body,-128.5*k,-143.5*k,sz,sz)}
+  else{const sz=2*p.r*256/195;ctx.drawImage(body,-sz/2,-sz/2,sz,sz)}
+ }else{
+  const grad=ctx.createRadialGradient(-p.r*.35,-p.r*.5,0,0,0,p.r*1.25);grad.addColorStop(0,p.c[0]);grad.addColorStop(.7,p.c[1]);grad.addColorStop(1,'#15264d');circle(0,0,p.r,grad);
+ }
+ // bonus star
+ if(p.star&&!p.visited){const st=A.star;ctx.save();ctx.rotate(t*1.1);if(ok(st)){const ss=28;ctx.drawImage(st,-ss/2,-ss/2,ss,ss)}else{ctx.fillStyle='#ffe4a1';ctx.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4,r=i%2?4:9;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath();ctx.fill()}ctx.restore()}
+ // goal ring
+ if(p.goal){const gr=A.goal_ring;ctx.save();ctx.rotate(-t*.5);ctx.globalAlpha=.75+.25*Math.sin(t*3);if(ok(gr)){const rs=2*(p.r+18)/.9316;ctx.drawImage(gr,-rs/2,-rs/2,rs,rs)}else{ctx.strokeStyle='#ffe49d';ctx.lineWidth=2.2;ctx.setLineDash([3,5]);circle(0,0,p.r+13)}ctx.restore()}
+ ctx.restore();
+}
+function drawShip(){
+ // wake: sprite while flying, soft polyline while orbiting
+ const wk=A.trail;
+ if(ship.flying&&ok(wk)){ctx.save();ctx.translate(ship.x,ship.y);ctx.rotate(ship.angle);ctx.globalAlpha=.9;ctx.drawImage(wk,-142,-7,134,14);ctx.restore()}
+ else{for(let i=1;i<ship.trail.length;i++){const a=ship.trail[i-1],b=ship.trail[i];ctx.globalAlpha=(i/ship.trail.length)*.55;ctx.strokeStyle='#83f8ed';ctx.lineWidth=(i/ship.trail.length)*3.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.globalAlpha=1}
+ ctx.save();ctx.translate(ship.x,ship.y);ctx.rotate(ship.angle);
+ const hull=A['ship_'+shipStyle],flame=A['flame_'+shipStyle];
+ if(ok(hull)){const S=58;if(ok(flame)){const f=Math.floor(t*12)%3;ctx.drawImage(flame,f*128,0,128,128,-S/2,-S/2,S,S)}ctx.drawImage(hull,-S/2,-S/2,S,S)}
+ else{ctx.fillStyle='#f3ffff';ctx.beginPath();ctx.moveTo(13,0);ctx.lineTo(-9,-7.5);ctx.lineTo(-5,0);ctx.lineTo(-9,7.5);ctx.closePath();ctx.fill()}
+ ctx.restore();
+ // one-time steer indicator
+ if(ship.flying&&!steerUsed){const ar=A.steer_arc;ctx.save();ctx.translate(ship.x,ship.y);ctx.rotate(ship.angle);
+  if(ok(ar)){const S=81*scale;ctx.globalAlpha=.7+.3*Math.sin(t*8);ctx.drawImage(ar,-S/2,-S/2,S,S)}
+  else{ctx.strokeStyle='#ffe49d88';ctx.lineWidth=1.7;ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(0,0,27*scale,-Math.PI/6,Math.PI/6);ctx.stroke();ctx.setLineDash([])}
+  ctx.restore()}
+}
+function render(){
+ctx.setTransform(dpr,0,0,dpr,0,0);
+const th=themes[(world-1)%themes.length];ctx.fillStyle=th[2];ctx.fillRect(0,0,w,h);
+const bg=ctx.createRadialGradient(w*.6,h*.4,0,w*.5,h*.5,Math.max(w,h)*.8);bg.addColorStop(0,th[0]);bg.addColorStop(.55,th[1]);bg.addColorStop(1,th[2]);ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+drawBackground();
+for(const s of stars){const a=(.22+.45*(.5+.5*Math.sin(t*s.v+s.phase)))*.75;ctx.globalAlpha=a;circle(s.x,s.y,s.r,'#d6eaff')}ctx.globalAlpha=1;
+const sx=shake?rand(-shake,shake):0,sy=shake?rand(-shake,shake):0;ctx.save();ctx.translate(w*.5+sx,h*.5+sy);ctx.scale(scale,scale);ctx.translate(-cam.x,-cam.y);
+if(planets.length){ctx.lineWidth=1/scale;ctx.strokeStyle='#516a9d24';ctx.setLineDash([3/scale,10/scale]);ctx.beginPath();for(let i=1;i<planets.length;i++){ctx.moveTo(planets[i-1].x,planets[i-1].y);ctx.lineTo(planets[i].x,planets[i].y)}ctx.stroke();ctx.setLineDash([])}
+for(const p of planets)drawPlanet(p);
+// Preview the exact unsteered launch tangent while orbiting. It is a guide, not a homing line.
+if(ship&&!ship.flying&&mode!=='gameover'&&ship.orbit){const heading=ship.orbitalAngle+Math.sign(ship.orbit.speed)*Math.PI/2;const ux=Math.cos(heading),uy=Math.sin(heading),previewLength=245*scale;let limit=previewLength;let target=null;for(const p of planets){if(p===ship.orbit)continue;const dx=p.x-ship.x,dy=p.y-ship.y;const along=dx*ux+dy*uy;const perpendicular2=dx*dx+dy*dy-along*along;const rad=p.gravity;if(along>0&&perpendicular2<rad*rad){const hit=along-Math.sqrt(Math.max(0,rad*rad-perpendicular2));if(hit>=0&&hit<limit){limit=hit;target=p}}}ctx.save();ctx.lineWidth=1.5/scale;ctx.setLineDash([6*scale,7*scale]);ctx.strokeStyle='#a3f8ef9a';ctx.shadowColor='#73e8ec';ctx.shadowBlur=5;ctx.beginPath();ctx.moveTo(ship.x+ux*18*scale,ship.y+uy*18*scale);ctx.lineTo(ship.x+ux*limit,ship.y+uy*limit);ctx.stroke();ctx.setLineDash([]);ctx.shadowBlur=0;ctx.globalAlpha=.85;const gd=tinted('guide_dot',target?'#ffe2a2':'#b7fcfa',32);if(gd){const gs=target?17:12;ctx.drawImage(gd,ship.x+ux*limit-gs/2,ship.y+uy*limit-gs/2,gs,gs)}else circle(ship.x+ux*limit,ship.y+uy*limit,target?3.8*scale:2.5*scale,target?'#ffe2a2':'#b7fcfa');ctx.restore()}
+
+if(ship)drawShip();
+for(const p of particles){const sp=tinted(['particle_spark','particle_dust','particle_dot'][p.kind||0],p.color,32);ctx.globalAlpha=(1-p.age/p.life)*.9;if(sp){const ps=p.r*7;ctx.drawImage(sp,p.x-ps/2,p.y-ps/2,ps,ps)}else circle(p.x,p.y,p.r,p.color)}ctx.globalAlpha=1;
+// sprite-sheet effects (5 columns): star burst 64px x6 frames, world-clear burst 512px x10 frames
+for(const f of fx){const im=A[f.k==='star'?'star_burst':'clear_burst'];if(!ok(im))continue;const fr=Math.min(f.n-1,Math.floor(f.age*12)),fw=f.k==='star'?64:512,S=f.k==='star'?110:640;ctx.drawImage(im,(fr%5)*fw,Math.floor(fr/5)*fw,fw,fw,f.x-S/2,f.y-S/2,S,S)}
+ctx.restore();
+const v=ctx.createRadialGradient(w*.5,h*.5,h*.2,w*.5,h*.5,Math.max(w,h)*.8);v.addColorStop(0,'#00000000');v.addColorStop(1,'#0206149e');ctx.fillStyle=v;ctx.fillRect(0,0,w,h);}
+function loop(now){const dt=last?Math.min((now-last)/1000,.035):.016;last=now;step(dt);render();requestAnimationFrame(loop)}
+function input(e){if(e&&e.target instanceof Element&&e.target.closest('button'))return;if(e&&e.type==='pointerdown'&&e.pointerType==='mouse'&&e.button!==0)return;if(mode==='playing'){if(ship.flying)steer();else launch()}}
+canvas.addEventListener('pointerdown',input);window.addEventListener('keydown',e=>{if(['Space','ArrowUp','Enter'].includes(e.code)){e.preventDefault();if(e.repeat)return;if(mode==='playing'){if(ship.flying)steer();else launch()}else if(mode==='paused')resume();else begin()}else if(e.code==='Escape'||e.code==='KeyP')pause()});document.querySelectorAll('[data-ship]').forEach(btn=>btn.addEventListener('click',()=>{shipStyle=btn.dataset.ship;document.querySelectorAll('[data-ship]').forEach(b=>{const selected=b.dataset.ship===shipStyle;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});try{localStorage.setItem('orbitHopShip',shipStyle)}catch(e){}}));document.querySelectorAll('[data-ship]').forEach(b=>{const selected=b.dataset.ship===shipStyle;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});startBtn.addEventListener('click',()=>{if(mode==='paused')resume();else begin()});pauseBtn.addEventListener('click',pause);muteBtn.addEventListener('click',()=>{sound=!sound;setIcon(muteBtn,sound?'icon_sound_on':'icon_sound_off');muteBtn.title=sound?'Mute sounds':'Enable sounds'});document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='playing')pause()});resize();freshWorld();ship.orbitalAngle=-Math.PI*.6;ship.x=ship.orbit.x+Math.cos(ship.orbitalAngle)*ship.orbitR;ship.y=ship.orbit.y+Math.sin(ship.orbitalAngle)*ship.orbitR;Promise.race([Promise.all(Object.values(A).map(i=>i.decode?i.decode().catch(()=>{}):0)),new Promise(r=>setTimeout(r,2500))]).then(()=>requestAnimationFrame(loop));
+})();
+</script></body></html>
